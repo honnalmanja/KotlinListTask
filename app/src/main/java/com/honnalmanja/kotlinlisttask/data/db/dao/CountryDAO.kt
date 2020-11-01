@@ -12,8 +12,11 @@ interface CountryDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun saveCountry(country: Country)
 
+    @Query("SELECT * FROM country LIMIT 1")
+    suspend fun getACountry() : Country
+
     @Query("SELECT * FROM country")
-    suspend fun getCountry() : List<Country>
+    suspend fun getAllCountry() : List<Country>
 
     @Query("DELETE FROM country")
     suspend fun deleteCountry()

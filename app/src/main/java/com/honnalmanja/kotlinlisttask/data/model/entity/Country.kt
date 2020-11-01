@@ -8,17 +8,12 @@ import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
 @Entity(tableName = "country")
-data class Country(
+class Country(title: String) {
 
     @PrimaryKey(autoGenerate = true)
     @ColumnInfo(name = "country_id")
-    val countryID: Int = 0,
-
-    @Ignore
-    @SerializedName("rows")
-    val countryDetails: List<CountryDetail>,
+    var countryID: Int = 1
 
     @ColumnInfo(name = "country_name")
-    @SerializedName("title")
-    val title: String
-)
+    var title: String = title
+}

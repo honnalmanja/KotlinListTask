@@ -9,11 +9,11 @@ import com.honnalmanja.kotlinlisttask.data.model.entity.CountryDetail
 @Dao
 interface CountryDetailDAO {
 
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    @Insert(onConflict = OnConflictStrategy.ABORT)
     suspend fun saveAllCountryDetails(countryDetailList: List<CountryDetail>)
 
     @Query("SELECT * FROM country_detail")
-    suspend fun getCountryDetails()
+    suspend fun getCountryDetails() : List<CountryDetail>
 
     @Query("DELETE FROM country_detail")
     suspend fun deleteCountryDetails()
