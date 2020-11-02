@@ -1,4 +1,4 @@
-package com.honnalmanja.kotlinlisttask.di
+package com.honnalmanja.kotlinlisttask.di.core
 
 import com.honnalmanja.kotlinlisttask.domain.CountryRepository
 import com.honnalmanja.kotlinlisttask.domain.CountryUseCase

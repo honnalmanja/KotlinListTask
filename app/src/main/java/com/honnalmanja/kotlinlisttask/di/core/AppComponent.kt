@@ -1,5 +1,6 @@
-package com.honnalmanja.kotlinlisttask.di
+package com.honnalmanja.kotlinlisttask.di.core
 
+import com.honnalmanja.kotlinlisttask.di.country.CountrySubComponent
 import dagger.Component
 
 @Component(modules = [AppModule::class, RetrofitModule::class, RoomDBModule::class,
@@ -7,4 +8,6 @@ import dagger.Component
     RepositoryModule::class, UseCaseModule::class
 ])
 interface AppComponent {
+
+    fun countrySubComponent(): CountrySubComponent.Factory
 }

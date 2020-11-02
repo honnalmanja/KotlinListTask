@@ -1,4 +1,4 @@
-package com.honnalmanja.kotlinlisttask.di
+package com.honnalmanja.kotlinlisttask.di.core
 
 import com.honnalmanja.kotlinlisttask.data.repository.impl.CountryCacheDataSourceImpl
 import com.honnalmanja.kotlinlisttask.data.repository.source.CountryCacheDataSource

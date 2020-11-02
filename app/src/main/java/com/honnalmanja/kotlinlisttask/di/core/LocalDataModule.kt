@@ -1,4 +1,4 @@
-package com.honnalmanja.kotlinlisttask.di
+package com.honnalmanja.kotlinlisttask.di.core
 
 import com.honnalmanja.kotlinlisttask.data.db.dao.CountryDAO
 import com.honnalmanja.kotlinlisttask.data.db.dao.CountryDetailDAO
