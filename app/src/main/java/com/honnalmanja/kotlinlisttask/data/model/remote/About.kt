@@ -5,11 +5,11 @@ import com.google.gson.annotations.SerializedName
 data class About(
 
     @SerializedName("description")
-    val description: String,
+    val description: String?,
 
     @SerializedName("imageHref")
-    val imageHref: String,
+    val imageHref: String?,
 
     @SerializedName("title")
-    val title: String
+    val title: String?
 )

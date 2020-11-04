@@ -30,13 +30,16 @@ class CountryRepositoryImpl(
      * @return canada: Updated country with detail List
      */
     override suspend fun updateCountryWithDetails(): Canada? {
-        val newCanada = getCountryDetailsFromAPI()
-        countryCacheDataSource.saveCountryWithDetails(newCanada)
+        var newCanada = getCountryDetailsFromAPI()
         saveCountryToLocalDB(newCanada)
+        newCanada = getCountryDetailsFromDB()
+        countryCacheDataSource.clearAll()
+        countryCacheDataSource.saveCountryWithDetails(newCanada)
         return newCanada
     }
 
     private suspend fun getCountryDetailsFromAPI(): Canada? {
+        LogUtils.logD(_TAG, "getCountryDetailsFromAPI")
         val response = countryRemoteDataSource.getAllCountryDetail()
         return try {
             response.body()
@@ -47,50 +50,58 @@ class CountryRepositoryImpl(
     }
 
     private suspend fun getCountryDetailsFromDB() : Canada? {
-        val country: Country = countryLocalDataSource.getACountry()
-        val countryDetails = countryLocalDataSource.getCountryDetails()
-        val aboutList = ArrayList<About>()
-        countryDetails.forEach {
-            aboutList.add(About(
-                    it.description, it.imageHref, it.title
-            ))
+        val country: Country? = countryLocalDataSource.getACountry()
+
+        return if(country == null){
+            LogUtils.logD(_TAG, "getCountryDetailsFromDB inside if")
+            val canada = getCountryDetailsFromAPI()
+            saveCountryToLocalDB(canada)
+        } else {
+            LogUtils.logD(_TAG, "getCountryDetailsFromDB inside else")
+            val countryDetails = countryLocalDataSource.getCountryDetails()
+            val aboutList = ArrayList<About>()
+            countryDetails.forEach {
+                if(!it.title.isNullOrEmpty()){
+                    aboutList.add(About(
+                            it.description, it.imageHref, it.title
+                    ))
+                }
+            }
+            Canada(aboutList, country.title)
         }
 
-        // if data not present in LocalDB get from API
-        if(country.title.isEmpty() or aboutList.isEmpty()){
-            val canada = getCountryDetailsFromAPI()
-            return saveCountryToLocalDB(canada)
-        }
-        return Canada(aboutList, country.title)
     }
 
     private suspend fun saveCountryToLocalDB(newCanada: Canada?) : Canada ?{
         return if(newCanada == null){
             null
         } else {
+            LogUtils.logD(_TAG, "Size: ${newCanada.abouts.size}")
             countryLocalDataSource.clearAllCountry()
             countryLocalDataSource.clearAllCountryDetails()
             countryLocalDataSource.saveACountry(newCanada)
-            newCanada
+            getCountryDetailsFromDB()
         }
     }
 
     private suspend fun getCountryDetailsFromCache() : Canada? {
 
-        var canada: Canada? = null
-        try {
-            canada = countryCacheDataSource.getCountryWithDetails()
-
+        return try {
+            var canada = countryCacheDataSource.getCountryWithDetails()
+            LogUtils.logD(_TAG, "indide try")
             // If data is not present in cache get from Local database
-            if(canada == null) {
+            if(canada != null) {
+                canada
+            } else {
                 canada = getCountryDetailsFromDB()
+                countryCacheDataSource.clearAll()
                 countryCacheDataSource.saveCountryWithDetails(canada)
+                canada
             }
         } catch (e: Exception){
-            LogUtils.logE(_TAG, "${e.message}")
+            LogUtils.logE(_TAG, "getCountryDetailsFromCache ${e.printStackTrace()}")
+            null
         }
-
-        return canada
     }
 
 }

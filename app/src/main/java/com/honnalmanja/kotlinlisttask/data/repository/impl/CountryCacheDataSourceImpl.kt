@@ -1,5 +1,6 @@
 package com.honnalmanja.kotlinlisttask.data.repository.impl
 
+import com.honnalmanja.kotlinlisttask.data.model.remote.About
 import com.honnalmanja.kotlinlisttask.data.model.remote.Canada
 import com.honnalmanja.kotlinlisttask.data.repository.source.CountryCacheDataSource
 
@@ -13,5 +14,10 @@ class CountryCacheDataSourceImpl : CountryCacheDataSource {
 
     override suspend fun saveCountryWithDetails(canada: Canada?) {
         this.canada = canada
+    }
+
+    override suspend fun clearAll() {
+        this.canada?.title = ""
+        this.canada?.abouts = ArrayList<About>()
     }
 }

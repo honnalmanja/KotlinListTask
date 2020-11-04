@@ -8,4 +8,6 @@ interface CountryCacheDataSource {
 
     suspend fun saveCountryWithDetails(canada: Canada?)
 
+    suspend fun clearAll()
+
 }

@@ -5,8 +5,8 @@ import com.google.gson.annotations.SerializedName
 data class Canada(
 
     @SerializedName("rows")
-    val abouts: List<About>,
+    var abouts: List<About>,
 
     @SerializedName("title")
-    val title: String
+    var title: String?
 )
