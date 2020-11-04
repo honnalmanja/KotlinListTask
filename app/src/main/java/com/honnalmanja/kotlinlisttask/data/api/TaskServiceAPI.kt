@@ -6,7 +6,7 @@ import retrofit2.http.GET
 
 interface TaskServiceAPI {
 
-    @GET("/2iodh4vg0eortkl/facts.json")
+    @GET("/s/2iodh4vg0eortkl/facts.json")
     suspend fun getAPIData() : Response<Canada>
 
 }
