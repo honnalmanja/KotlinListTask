@@ -7,12 +7,12 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.contrib.RecyclerViewActions.actionOnItemAtPosition
 import androidx.test.espresso.matcher.ViewMatchers
-import androidx.test.espresso.matcher.ViewMatchers.withId
-import androidx.test.espresso.matcher.ViewMatchers.withText
+import androidx.test.espresso.matcher.ViewMatchers.*
 import androidx.test.ext.junit.rules.ActivityScenarioRule
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.filters.LargeTest
 import com.honnalmanja.kotlinlisttask.R
+import org.hamcrest.CoreMatchers.allOf
 import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -51,13 +51,24 @@ class CountryTest {
 
     @Test
     fun recyclerViewItemCountTest() {
+
+        var itemCount: Int? = 0
         this.activityRule.scenario.onActivity { activity->
             val recyclerView: RecyclerView = activity.findViewById(R.id.country_rv)
-            val itemCount = recyclerView.adapter?.itemCount
+            itemCount = recyclerView.adapter?.itemCount
             // check recyclerview getting item_rows
-            if (itemCount != null) {
-                assert(itemCount > 0)
-            }
+
+        }
+
+        if (itemCount != null) {
+            println("$itemCount")
+            assert(itemCount!! > 0)
+        } else {
+            onView(allOf(withId(com.google.android.material.R.id.snackbar_text),
+                withText("Something went wrong, Try Again")))
+                .check(matches(isDisplayed()));
+//            onView(withId(com.google.android.material.R.id.snackbar_text))
+//                .check(matches(withText("Something went wrong, Try Again")))
         }
     }
 
